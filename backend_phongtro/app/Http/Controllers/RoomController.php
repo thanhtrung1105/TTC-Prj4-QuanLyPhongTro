@@ -21,30 +21,36 @@ class RoomController extends Controller
         ], 200);
     }
     public function store(Request $request)
-    {
-        // 1. Kiểm tra dữ liệu gửi lên
-        $request->validate([
-            'room_number' => 'required|string|max:50',
-            'area' => 'required|numeric',
-            'base_price' => 'required|numeric',
-        ]);
+{
+    // 1. Kiểm tra dữ liệu gửi lên
+    $request->validate([
+        'room_number' => 'required|string|max:50',
+        'floor' => 'nullable|integer',
+        'area' => 'required|numeric',
+        'base_price' => 'required|numeric',
+        'description' => 'nullable|string',
+        'images' => 'nullable|array', // Bắt buộc phải là một mảng
+    ]);
 
-        // 2. Tạo phòng mới, tự động lấy ID của người đang đăng nhập làm landlord_id
-        $room = Room::create([
-            'landlord_id' => $request->user()->id, 
-            'room_number' => $request->room_number,
-            'floor' => $request->floor ?? 1,
-            'area' => $request->area,
-            'base_price' => $request->base_price,
-            'status' => 'available', // Mặc định là trống
-            'description' => $request->description,
-        ]);
+    // 2. Tạo phòng mới
+    // Laravel sẽ tự động chuyển mảng 'images' thành chuỗi JSON để lưu vào DB 
+    // nhờ vào khai báo $casts trong Model Room.
+    $room = Room::create([
+        'landlord_id' => $request->user()->id, 
+        'room_number' => $request->room_number,
+        'floor' => $request->floor ?? 1,
+        'area' => $request->area,
+        'base_price' => $request->base_price,
+        'status' => 'available',
+        'description' => $request->description,
+        'images' => $request->images, 
+    ]);
 
-        return response()->json([
-            'message' => 'Thêm phòng mới thành công',
-            'data' => $room
-        ], 201);
-    }
+    return response()->json([
+        'message' => 'Thêm phòng mới thành công cho hệ thống TNMT',
+        'data' => $room
+    ], 201);
+}
     // Xem chi tiết 1 phòng
     public function show($id)
     {

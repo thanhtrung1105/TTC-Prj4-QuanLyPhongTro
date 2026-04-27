@@ -6,8 +6,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Filament\Models\Contracts\HasName; // <-- 1. Import class HasName của Filament
 
-class User extends Authenticatable
+class User extends Authenticatable implements HasName // <-- 2. Khai báo implements HasName
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -30,6 +31,12 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    // <-- 3. Thêm hàm này để Filament biết lấy cột nào làm tên hiển thị
+    public function getFilamentName(): string
+    {
+        return $this->fullname ?? 'Admin'; 
+    }
 
     // Nếu User là Chủ trọ (landlord), họ sẽ có nhiều Phòng
     public function rooms()

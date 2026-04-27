@@ -41,4 +41,8 @@ class Room extends Model
     {
         return $this->hasMany(Contract::class, 'room_id');
     }
+
+    protected $casts = [
+    'images' => 'array', // Tự động chuyển đổi JSON <-> Array
+];
 }
