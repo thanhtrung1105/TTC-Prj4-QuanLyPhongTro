@@ -17,6 +17,7 @@ use Filament\Actions\DeleteAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use App\Filament\Resources\Invoices\InvoiceResource\RelationManagers\DetailsRelationManager;
+use App\Filament\Resources\Invoices\InvoiceResource\RelationManagers\PaymentsRelationManager;
 
 class InvoiceResource extends Resource
 {
@@ -136,6 +137,7 @@ class InvoiceResource extends Resource
     {
         return [
             DetailsRelationManager::class,
+            PaymentsRelationManager::class,
         ];
     }
 
