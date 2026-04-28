@@ -9,34 +9,27 @@ class Contract extends Model
 {
     use HasFactory;
 
-    protected $table = 'contracts';
-
+    // Các cột được phép lưu
     protected $fillable = [
-        'tenant_id',
         'room_id',
+        'tenant_id',
         'start_date',
         'end_date',
-        'monthly_price',
         'deposit_amount',
+        'rental_price',
         'status',
-        'contract_file'
+        'notes',
     ];
 
-    // Hợp đồng thuộc về 1 Khách thuê
-    public function tenant()
-    {
-        return $this->belongsTo(Tenant::class, 'tenant_id');
-    }
-
-    // Hợp đồng thuộc về 1 Phòng
+    // Khai báo: 1 Hợp đồng thuộc về 1 Phòng
     public function room()
     {
         return $this->belongsTo(Room::class, 'room_id');
     }
 
-    // 1 Hợp đồng sẽ sinh ra nhiều Hóa đơn hàng tháng
-    public function invoices()
+    // Khai báo: 1 Hợp đồng thuộc về 1 Khách thuê
+    public function tenant()
     {
-        return $this->hasMany(Invoice::class, 'contract_id');
+        return $this->belongsTo(Tenant::class, 'tenant_id');
     }
 }

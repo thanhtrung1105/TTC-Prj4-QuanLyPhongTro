@@ -21,7 +21,7 @@ class Room extends Model
         'base_price', 
         'status', 
         'description', 
-        'images'
+        'image',
     ];
 
     // 3. Định nghĩa mối quan hệ (Phòng thuộc về 1 Chủ trọ)

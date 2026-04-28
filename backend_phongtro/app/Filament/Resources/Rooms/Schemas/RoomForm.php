@@ -2,23 +2,33 @@
 
 namespace App\Filament\Resources\Rooms\Schemas;
 
-use Filament\Schemas\Schema; // Lõi Form mới
-use Filament\Schemas\Components\Section; // Giao diện Section mới
+use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\FileUpload; // <-- IMPORT CÔNG CỤ UPLOAD ẢNH
+use Illuminate\Database\Eloquent\Builder;
 
 class RoomForm
 {
     public static function configure(Schema $schema): Schema
     {
         return $schema
-            ->components([ // Lõi Schema dùng components() ở ngoài cùng
+            ->components([
                 Section::make('Thông tin cơ bản')
                     ->description('Nhập các thông số chính của phòng trọ')
                     ->icon('heroicon-o-information-circle')
                     ->columns(2)
-                    ->schema([ // Bên trong Section thì vẫn dùng schema()
+                    ->schema([
+                        Select::make('landlord_id')
+                            ->label('Thuộc về Chủ trọ')
+                            ->relationship('landlord', 'fullname', fn (Builder $query) => $query->where('role', 'chu_tro'))
+                            ->searchable()
+                            ->preload()
+                            ->required()
+                            ->columnSpanFull(),
+
                         TextInput::make('room_number')
                             ->label('Mã phòng (VD: P101)')
                             ->required()
@@ -43,6 +53,20 @@ class RoomForm
                             ->minValue(0)
                             ->step(100000),
                     ]),
+
+                // --- KHU VỰC UPLOAD ẢNH MỚI ĐƯỢC THÊM VÀO ĐÂY ---
+                Section::make('Hình ảnh phòng trọ')
+                    ->icon('heroicon-o-camera')
+                    ->schema([
+                        FileUpload::make('image')
+                            ->label('Ảnh đại diện phòng')
+                            ->image() // Chỉ cho phép up file ảnh
+                            ->imageEditor() // Tích hợp sẵn công cụ cắt/xoay ảnh
+                            ->directory('room-images') // Ảnh sẽ lưu vào thư mục này
+                            ->visibility('public')
+                            ->columnSpanFull(),
+                    ]),
+                // -------------------------------------------------
 
                 Section::make('Trạng thái & Mô tả')
                     ->icon('heroicon-o-clipboard-document-list')

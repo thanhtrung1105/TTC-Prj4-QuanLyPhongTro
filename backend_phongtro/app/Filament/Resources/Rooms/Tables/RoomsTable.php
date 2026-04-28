@@ -6,6 +6,7 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ImageColumn; // <-- IMPORT CÔNG CỤ HIỂN THỊ ẢNH
 use Filament\Tables\Table;
 
 class RoomsTable
@@ -14,14 +15,25 @@ class RoomsTable
     {
         return $table
             ->columns([
-                // Tôi đã ẩn cột landlord_id đi vì hiển thị mỗi con số (VD: 2) 
-                // ở bảng danh sách phòng không mang lại nhiều ý nghĩa cho người xem.
+                // --- CỘT HIỂN THỊ ẢNH Ở ĐẦU BẢNG ---
+                ImageColumn::make('image')
+                    ->label('Ảnh')
+                    ->circular() // Cắt ảnh thành hình tròn cho hiện đại
+                    ->size(40), // Kích thước ảnh 40x40px
+                // -----------------------------------
+
+                TextColumn::make('landlord.fullname')
+                    ->label('Chủ trọ')
+                    ->searchable()
+                    ->sortable()
+                    ->icon('heroicon-m-user')
+                    ->color('info'),
 
                 TextColumn::make('room_number')
                     ->label('Mã phòng')
                     ->searchable()
                     ->sortable()
-                    ->weight('bold'), // In đậm mã phòng
+                    ->weight('bold'),
 
                 TextColumn::make('floor')
                     ->label('Tầng')
@@ -31,22 +43,22 @@ class RoomsTable
                 TextColumn::make('area')
                     ->label('Diện tích')
                     ->numeric()
-                    ->suffix(' m²') // Thêm chữ m² vào sau số
+                    ->suffix(' m²')
                     ->sortable(),
 
                 TextColumn::make('base_price')
                     ->label('Giá thuê')
-                    ->money('VND') // Tự động định dạng tiền Việt Nam đồng
+                    ->money('VND')
                     ->sortable()
-                    ->color('success'), // Chữ màu xanh lá cho số tiền
+                    ->color('success'),
 
                 TextColumn::make('status')
                     ->label('Trạng thái')
-                    ->badge() // Biến thành huy hiệu
+                    ->badge()
                     ->color(fn (string $state): string => match ($state) {
-                        'available' => 'success',   // Trống -> Xanh lá
-                        'occupied' => 'danger',     // Đã thuê -> Đỏ
-                        'maintenance' => 'warning', // Bảo trì -> Vàng
+                        'available' => 'success',
+                        'occupied' => 'danger',
+                        'maintenance' => 'warning',
                         default => 'gray',
                     })
                     ->formatStateUsing(fn (string $state): string => match ($state) {
@@ -58,9 +70,9 @@ class RoomsTable
 
                 TextColumn::make('created_at')
                     ->label('Ngày tạo')
-                    ->dateTime('d/m/Y H:i') // Định dạng ngày giờ VN
+                    ->dateTime('d/m/Y H:i')
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true), // Giấu đi, bấm vào nút cột mới hiện ra
+                    ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('updated_at')
                     ->label('Cập nhật lần cuối')
@@ -72,11 +84,11 @@ class RoomsTable
                 //
             ])
             ->recordActions([
-                EditAction::make()->label('Sửa'), // Việt hóa chữ Edit
+                EditAction::make()->label('Sửa'),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
-                    DeleteBulkAction::make()->label('Xóa đã chọn'), // Việt hóa chữ Delete
+                    DeleteBulkAction::make()->label('Xóa đã chọn'),
                 ]),
             ]);
     }
