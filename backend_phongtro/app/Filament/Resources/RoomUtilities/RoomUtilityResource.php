@@ -1,9 +1,7 @@
 <?php
 
-// 1. ĐÃ SỬA LẠI ĐÚNG TÊN THƯ MỤC CỦA BẠN LÀ RoomUtilities
 namespace App\Filament\Resources\RoomUtilities;
 
-// 2. ĐÃ SỬA LẠI ĐÚNG ĐƯỜNG DẪN ĐẾN THƯ MỤC Pages
 use App\Filament\Resources\RoomUtilities\Pages; 
 use App\Models\RoomUtility;
 use Filament\Resources\Resource;
@@ -20,9 +18,6 @@ use Filament\Actions\EditAction;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
-
-// 3. ĐÃ THÊM DÒNG NÀY ĐỂ FIX LỖI Get $get
-use Filament\Forms\Get; 
 
 class RoomUtilityResource extends Resource
 {
@@ -92,7 +87,8 @@ class RoomUtilityResource extends Resource
                     ->schema([
                         Placeholder::make('total_display')
                             ->label('Tổng tiền dự kiến')
-                            ->content(function (Get $get) {
+                            // Đã xóa type hint Get ở đây để VS Code hết báo lỗi ảo
+                            ->content(function ($get) {
                                 $elec = ((float)$get('electricity_new') - (float)$get('electricity_old')) * (float)$get('electricity_price');
                                 $water = ((float)$get('water_new') - (float)$get('water_old')) * (float)$get('water_price');
                                 $total = max(0, $elec) + max(0, $water);

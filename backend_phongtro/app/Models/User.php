@@ -12,6 +12,8 @@ class User extends Authenticatable implements HasName // <-- 2. Khai báo implem
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    protected $table = 'TNMTnguoidung';
+
     protected $fillable = [
         'email',
         'password',

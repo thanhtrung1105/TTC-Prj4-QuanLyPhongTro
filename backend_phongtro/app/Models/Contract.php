@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Contract extends Model
 {
     use HasFactory;
+    
+    protected $table = 'TNMThopdong';
 
     // Các cột được phép lưu
     protected $fillable = [

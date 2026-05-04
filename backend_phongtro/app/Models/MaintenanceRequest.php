@@ -9,6 +9,8 @@ class MaintenanceRequest extends Model
 {
     use HasFactory;
 
+    protected $table = 'TNMTyeucaubaoduong';
+
     protected $fillable = [
         'room_id',
         'tenant_id',
