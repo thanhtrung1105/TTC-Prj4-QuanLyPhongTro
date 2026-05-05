@@ -19,7 +19,7 @@ class AuthController extends Controller
         $user = User::where('email', $request->email)->first();
 
         // Kiểm tra tài khoản và mật khẩu
-        if (!$user || !Hash::check($request->password, trim($user->password))) {
+        if (!$user || !Hash::check($request->password, $user->password)) {
             return response()->json(['message' => 'Sai email hoặc mật khẩu'], 401);
         }
 

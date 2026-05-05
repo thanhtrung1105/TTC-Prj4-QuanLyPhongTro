@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Filament\Resources\Invoices; // <-- ĐÃ SỬA CHUẨN ĐƯỜNG DẪN THƯ MỤC INVOICES
+namespace App\Filament\Resources\Invoices;
 
-use App\Filament\Resources\Invoices\Pages; // <-- ĐÃ SỬA CHUẨN ĐƯỜNG DẪN PAGES
+use App\Filament\Resources\Invoices\Pages;
 use App\Models\Invoice;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -12,10 +12,16 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
+
+// 1. TRẢ LẠI ĐÚNG ĐƯỜNG DẪN NGUYÊN BẢN CỦA BẠN (BỎ QUA NẾU VSCODE BÁO ĐỎ)
 use Filament\Actions\EditAction;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
+
+// 2. CHỈ THÊM DUY NHẤT THẰNG NÀY ĐỂ TẠO NÚT IN PDF
+use Filament\Tables\Actions\Action;
+
 use App\Filament\Resources\Invoices\InvoiceResource\RelationManagers\DetailsRelationManager;
 use App\Filament\Resources\Invoices\InvoiceResource\RelationManagers\PaymentsRelationManager;
 
@@ -125,6 +131,17 @@ class InvoiceResource extends Resource
             ->recordActions([
                 EditAction::make()->label('Sửa'),
                 DeleteAction::make()->label('Xóa'),
+                \Filament\Actions\Action::make('print')
+                    ->label('In PDF')
+                    ->icon('heroicon-o-printer')
+                    ->color('success')
+                    ->action(function ($record) {
+                        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('pdf.invoice', ['invoice' => $record]);
+                        return response()->streamDownload(
+                            fn () => print($pdf->output()),
+                            "hoa-don-{$record->id}.pdf"
+                        );
+                    }),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

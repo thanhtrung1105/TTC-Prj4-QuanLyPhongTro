@@ -28,32 +28,50 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            
+            // 1. ĐỔI TÊN THƯƠNG HIỆU
+            ->brandName('Quản Lý Trọ TNMT') 
+            
+            // 2. ĐỔI FONT CHỮ HIỆN ĐẠI (Tự động tải Google Font)
+            ->font('Inter') 
+            
+            // 3. ĐỔI MÀU SẮC CHỦ ĐẠO
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => \Filament\Support\Colors\Color::Blue, // Màu xanh dương đậm chất công nghệ
+                'danger' => \Filament\Support\Colors\Color::Rose,
+                'success' => \Filament\Support\Colors\Color::Emerald,
+                'warning' => \Filament\Support\Colors\Color::Orange,
             ])
-            ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
-            ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
+            
+            // 4. CHO PHÉP THU GỌN MENUBAR BÊN TRÁI (Chuẩn UI xịn)
+            ->sidebarCollapsibleOnDesktop() 
+            
+            // (Tùy chọn) Nếu thích menu nằm ngang trên cùng thay vì bên trái, bỏ comment dòng dưới:
+            // ->topNavigation() 
+
+            ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
+            ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([
-                Dashboard::class,
+                \Filament\Pages\Dashboard::class,
             ])
-            ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
+            ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
-                // AccountWidget::class,
-                // FilamentInfoWidget::class,
+                // Đăng ký 2 cái Widget thống kê của chúng ta ở đây
+                \App\Filament\Widgets\StatsOverview::class,
+                \App\Filament\Widgets\RevenueChart::class,
             ])
             ->middleware([
-                EncryptCookies::class,
-                AddQueuedCookiesToResponse::class,
-                StartSession::class,
-                AuthenticateSession::class,
-                ShareErrorsFromSession::class,
-                PreventRequestForgery::class,
-                SubstituteBindings::class,
-                DisableBladeIconComponents::class,
-                DispatchServingFilamentEvent::class,
+                \Illuminate\Cookie\Middleware\EncryptCookies::class,
+                \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+                \Illuminate\Session\Middleware\StartSession::class,
+                \Illuminate\View\Middleware\ShareErrorsFromSession::class,
+                \Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class,
+                \Illuminate\Routing\Middleware\SubstituteBindings::class,
+                \Filament\Http\Middleware\DisableBladeIconComponents::class,
+                \Filament\Http\Middleware\DispatchServingFilamentEvent::class,
             ])
             ->authMiddleware([
-                Authenticate::class,
+                \Filament\Http\Middleware\Authenticate::class,
             ]);
     }
 }

@@ -9,7 +9,7 @@ class Tenant extends Model
 {
     use HasFactory;
 
-    protected $table = 'TNMTkhachthue';
+    protected $table = 'tnmtkhachthue';
 
     // Cho phép lưu các cột này vào Database
     protected $fillable = [

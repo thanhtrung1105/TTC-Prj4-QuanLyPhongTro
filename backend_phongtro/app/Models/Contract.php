@@ -9,7 +9,7 @@ class Contract extends Model
 {
     use HasFactory;
     
-    protected $table = 'TNMThopdong';
+    protected $table = 'tnmthopdong';
 
     // Các cột được phép lưu
     protected $fillable = [

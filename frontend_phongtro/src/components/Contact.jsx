@@ -1,27 +1,120 @@
 function Contact() {
   return (
-    <div className="app-container">
-      <div className="page-header">
-        <h1 className="page-title">Thông tin Liên hệ</h1>
-      </div>
+    <div className="w-full font-sans bg-slate-50 min-h-[calc(100vh-140px)]">
+      {/* Header Section */}
+      <section className="bg-slate-900 text-white py-20 px-4 relative overflow-hidden">
+        <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-[800px] h-[400px] bg-blue-600 rounded-full blur-[100px] opacity-20"></div>
+        <div className="max-w-7xl mx-auto relative z-10 text-center">
+          <h1 className="text-4xl md:text-5xl font-extrabold mb-4 tracking-tight">
+            Liên Hệ Với Chúng Tôi
+          </h1>
+          <p className="text-xl text-slate-300 max-w-2xl mx-auto font-medium">
+            Bạn có thắc mắc hoặc cần hỗ trợ? Đội ngũ của chúng tôi luôn sẵn sàng giúp đỡ bạn 24/7.
+          </p>
+        </div>
+      </section>
 
-      <div className="contact-box">
-        <h2 style={{ marginBottom: "20px", color: "#1e293b" }}>
-          Hỗ trợ trực tuyến 24/7
-        </h2>
-        <p>
-          📍 <strong>Địa chỉ:</strong> Khu công nghệ cao, TP. Hà Nội
-        </p>
-        <p>
-          📞 <strong>Điện thoại:</strong> 0901.234.567
-        </p>
-        <p>
-          📧 <strong>Email:</strong> buitrung4212@gmail.com
-        </p>
-        <p>
-          🕒 <strong>Giờ làm việc:</strong> 8:00 - 18:00 (Thứ 2 - Thứ 7)
-        </p>
-      </div>
+      {/* Main Content */}
+      <section className="max-w-7xl mx-auto px-4 py-16 -mt-10 relative z-20">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          
+          {/* Contact Info Cards */}
+          <div className="lg:col-span-1 flex flex-col gap-6">
+            <div className="bg-white p-8 rounded-3xl shadow-lg shadow-slate-200/50 border border-slate-100 flex items-start gap-4 hover:-translate-y-1 transition-transform">
+              <div className="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-2xl flex-shrink-0">
+                📍
+              </div>
+              <div>
+                <h3 className="text-lg font-bold text-slate-900 mb-1">Địa chỉ</h3>
+                <p className="text-slate-600 font-medium">Khu công nghệ cao<br/>TP. Hà Nội</p>
+              </div>
+            </div>
+
+            <div className="bg-white p-8 rounded-3xl shadow-lg shadow-slate-200/50 border border-slate-100 flex items-start gap-4 hover:-translate-y-1 transition-transform">
+              <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-2xl flex-shrink-0">
+                📞
+              </div>
+              <div>
+                <h3 className="text-lg font-bold text-slate-900 mb-1">Điện thoại</h3>
+                <p className="text-slate-600 font-medium">0901.234.567</p>
+                <p className="text-sm text-slate-400 mt-1">Hỗ trợ khẩn cấp 24/7</p>
+              </div>
+            </div>
+
+            <div className="bg-white p-8 rounded-3xl shadow-lg shadow-slate-200/50 border border-slate-100 flex items-start gap-4 hover:-translate-y-1 transition-transform">
+              <div className="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-2xl flex-shrink-0">
+                📧
+              </div>
+              <div>
+                <h3 className="text-lg font-bold text-slate-900 mb-1">Email</h3>
+                <p className="text-slate-600 font-medium">buitrung4212@gmail.com</p>
+                <p className="text-sm text-slate-400 mt-1">Phản hồi trong 2h</p>
+              </div>
+            </div>
+
+            <div className="bg-white p-8 rounded-3xl shadow-lg shadow-slate-200/50 border border-slate-100 flex items-start gap-4 hover:-translate-y-1 transition-transform">
+              <div className="w-12 h-12 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center text-2xl flex-shrink-0">
+                🕒
+              </div>
+              <div>
+                <h3 className="text-lg font-bold text-slate-900 mb-1">Giờ làm việc</h3>
+                <p className="text-slate-600 font-medium">8:00 - 18:00</p>
+                <p className="text-sm text-slate-400 mt-1">Thứ 2 - Thứ 7</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Contact Form */}
+          <div className="lg:col-span-2 bg-white p-8 md:p-12 rounded-3xl shadow-xl shadow-slate-200/50 border border-slate-100">
+            <h2 className="text-3xl font-extrabold text-slate-900 mb-6">Gửi tin nhắn cho chúng tôi</h2>
+            <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-bold text-slate-700 mb-2">Họ và tên</label>
+                  <input 
+                    type="text" 
+                    placeholder="Nguyễn Văn A" 
+                    className="w-full px-5 py-4 rounded-2xl border border-slate-200 focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none transition-all bg-slate-50 focus:bg-white"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-bold text-slate-700 mb-2">Số điện thoại</label>
+                  <input 
+                    type="tel" 
+                    placeholder="0912 345 678" 
+                    className="w-full px-5 py-4 rounded-2xl border border-slate-200 focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none transition-all bg-slate-50 focus:bg-white"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-bold text-slate-700 mb-2">Email</label>
+                <input 
+                  type="email" 
+                  placeholder="nguyenvana@example.com" 
+                  className="w-full px-5 py-4 rounded-2xl border border-slate-200 focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none transition-all bg-slate-50 focus:bg-white"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-bold text-slate-700 mb-2">Nội dung tin nhắn</label>
+                <textarea 
+                  rows="5" 
+                  placeholder="Bạn cần hỗ trợ vấn đề gì?..." 
+                  className="w-full px-5 py-4 rounded-2xl border border-slate-200 focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none transition-all bg-slate-50 focus:bg-white resize-none"
+                ></textarea>
+              </div>
+
+              <button 
+                type="submit" 
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-2xl shadow-lg shadow-blue-600/30 hover:shadow-xl hover:shadow-blue-600/40 transition-all transform hover:-translate-y-1"
+              >
+                Gửi Tin Nhắn
+              </button>
+            </form>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

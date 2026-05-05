@@ -9,7 +9,7 @@ class Payment extends Model
 {
     use HasFactory;
 
-    protected $table = 'TNMTthanhtoan';
+    protected $table = 'tnmtthanhtoan';
 
     protected $fillable = [
         'invoice_id',

@@ -6,33 +6,26 @@ import RoomList from "./components/RoomList";
 import Contact from "./components/Contact";
 import RoomDetail from "./components/RoomDetail";
 import Login from "./components/Login";
-import AdminDashboard from "./components/AdminDashboard"; // 1. Import trang quản trị
+import MyInvoices from "./components/MyInvoices";
+import InvoiceDetail from "./components/InvoiceDetail";
+import PaymentPage from "./components/PaymentPage";
 
 function App() {
   return (
     <BrowserRouter>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          minHeight: "100vh",
-          backgroundColor: "#f8fafc",
-        }}
-      >
-        {/* Chú ý: Ta nên ẩn Navbar ở trang Quản trị để giao diện Admin rộng rãi hơn, 
-            nhưng tạm thời cứ để nguyên để bạn dễ mường tượng luồng đi */}
+      <div className="flex flex-col min-h-screen bg-slate-50 font-sans">
         <Navbar />
 
-        <main style={{ flex: 1 }}>
+        <main className="flex-1 w-full">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/phong-tro" element={<RoomList />} />
             <Route path="/lien-he" element={<Contact />} />
             <Route path="/phong-tro/:id" element={<RoomDetail />} />
             <Route path="/login" element={<Login />} />
-
-            {/* 2. Cập nhật route Quản lý */}
-            <Route path="/quan-ly" element={<AdminDashboard />} />
+            <Route path="/hoa-don-cua-toi" element={<MyInvoices />} />
+            <Route path="/hoa-don-cua-toi/:id" element={<InvoiceDetail />} />
+            <Route path="/thanh-toan/:id" element={<PaymentPage />} />
           </Routes>
         </main>
 

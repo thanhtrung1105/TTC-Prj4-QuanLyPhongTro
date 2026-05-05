@@ -9,7 +9,7 @@ class MaintenanceRequest extends Model
 {
     use HasFactory;
 
-    protected $table = 'TNMTyeucaubaoduong';
+    protected $table = 'tnmtyeucaubaoduong';
 
     protected $fillable = [
         'room_id',

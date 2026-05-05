@@ -9,7 +9,7 @@ class InvoiceDetail extends Model
 {
     use HasFactory;
 
-    protected $table = 'TNMTchitiethodon';
+    protected $table = 'tnmtchitiethodon';
 
     protected $fillable = [
         'invoice_id',

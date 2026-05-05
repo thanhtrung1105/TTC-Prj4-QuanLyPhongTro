@@ -9,7 +9,7 @@ class Invoice extends Model
 {
     use HasFactory;
 
-    protected $table = 'TNMThoadon';
+    protected $table = 'tnmthoadon';
 
     // Khớp 100% với các cột trong bảng invoices của file SQL
     protected $fillable = [

@@ -10,7 +10,7 @@ class Room extends Model
     use HasFactory;
 
     // 1. Chỉ định chính xác tên bảng trong MySQL
-    protected $table = 'TNMTphong';
+    protected $table = 'tnmtphong';
 
     // 2. Cho phép thao tác thêm/sửa trên các cột này
     protected $fillable = [
