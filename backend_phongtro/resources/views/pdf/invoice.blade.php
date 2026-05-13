@@ -31,16 +31,33 @@
     <table>
         <thead>
             <tr>
+                <th>STT</th>
                 <th>Nội dung thu</th>
+                <th style="text-align: right;">Số lượng</th>
+                <th style="text-align: right;">Đơn giá</th>
                 <th style="text-align: right;">Thành tiền</th>
             </tr>
         </thead>
         <tbody>
-            <!-- Nếu bạn có bảng chi tiết hóa đơn thì dùng vòng lặp ở đây, hiện tại mình hiển thị tổng tiền -->
-            <tr>
-                <td>Tiền thuê phòng & Dịch vụ tháng {{ $invoice->month }}/{{ $invoice->year }}</td>
-                <td style="text-align: right;">{{ number_format($invoice->total_amount, 0, ',', '.') }} VNĐ</td>
-            </tr>
+            @if($invoice->details && $invoice->details->count() > 0)
+                @foreach($invoice->details as $index => $detail)
+                <tr>
+                    <td>{{ $index + 1 }}</td>
+                    <td>{{ $detail->service_name }}</td>
+                    <td style="text-align: right;">{{ number_format($detail->quantity, 0) }}</td>
+                    <td style="text-align: right;">{{ number_format($detail->unit_price, 0, ',', '.') }} đ</td>
+                    <td style="text-align: right;">{{ number_format($detail->amount, 0, ',', '.') }} VNĐ</td>
+                </tr>
+                @endforeach
+            @else
+                <tr>
+                    <td>1</td>
+                    <td>Tiền thuê phòng & Dịch vụ tháng {{ $invoice->month }}/{{ $invoice->year }}</td>
+                    <td style="text-align: right;">1</td>
+                    <td style="text-align: right;">{{ number_format($invoice->total_amount, 0, ',', '.') }} đ</td>
+                    <td style="text-align: right;">{{ number_format($invoice->total_amount, 0, ',', '.') }} VNĐ</td>
+                </tr>
+            @endif
         </tbody>
     </table>
 

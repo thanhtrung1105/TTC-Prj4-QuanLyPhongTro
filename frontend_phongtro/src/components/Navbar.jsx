@@ -1,29 +1,39 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import api from "../utils/axios";
 
 function Navbar() {
   const location = useLocation();
   const navigate = useNavigate();
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userName, setUserName] = useState("");
   const [userRole, setUserRole] = useState(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const dropdownRef = useRef(null);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     const role = localStorage.getItem("role");
+    const userStr = localStorage.getItem("user");
 
     if (token) {
       setIsLoggedIn(true);
       setUserRole(role);
+      if (userStr) {
+        try {
+          const user = JSON.parse(userStr);
+          setUserName(user.fullname || user.email || "");
+        } catch { setUserName(""); }
+      }
     } else {
       setIsLoggedIn(false);
       setUserRole(null);
+      setUserName("");
     }
   }, [location]);
 
-  // Click ra ngoài để đóng dropdown
   useEffect(() => {
     function handleClickOutside(event) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -36,21 +46,37 @@ function Navbar() {
     };
   }, []);
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    try {
+      await api.post("/logout");
+    } catch (err) {
+      console.error("Logout API error:", err);
+    }
     localStorage.removeItem("token");
     localStorage.removeItem("role");
+    localStorage.removeItem("user");
     setIsLoggedIn(false);
     setIsDropdownOpen(false);
+    setIsMobileMenuOpen(false);
     navigate("/login");
   };
+
+  const isActive = (path) => location.pathname === path;
+
+  const navLinks = [
+    { to: "/", label: "Trang Chủ" },
+    { to: "/phong-tro", label: "Danh Sách Phòng" },
+    { to: "/lien-he", label: "Liên Hệ" },
+  ];
+
+  const userInitial = userName ? userName.charAt(0).toUpperCase() : "?";
 
   return (
     <nav className="bg-white/80 backdrop-blur-lg border-b border-slate-200 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           
-          {/* Logo (Bên trái) */}
-          <div className="flex-shrink-0 w-1/4">
+          <div className="flex-shrink-0">
             <Link
               to="/"
               className="text-3xl font-black text-slate-900 tracking-tighter"
@@ -59,30 +85,33 @@ function Navbar() {
             </Link>
           </div>
 
-          {/* Menu Chính (Ra giữa) */}
           <div className="hidden md:flex flex-1 justify-center space-x-10">
-            <Link
-              to="/"
-              className="text-slate-600 hover:text-blue-600 font-bold transition-colors"
-            >
-              Trang Chủ
-            </Link>
-            <Link
-              to="/phong-tro"
-              className="text-slate-600 hover:text-blue-600 font-bold transition-colors"
-            >
-              Danh Sách Phòng
-            </Link>
-            <Link
-              to="/lien-he"
-              className="text-slate-600 hover:text-blue-600 font-bold transition-colors"
-            >
-              Liên Hệ
-            </Link>
+            {navLinks.map((link) => (
+              <Link
+                key={link.to}
+                to={link.to}
+                className={`font-bold transition-colors relative py-1 ${
+                  isActive(link.to)
+                    ? "text-blue-600"
+                    : "text-slate-600 hover:text-blue-600"
+                }`}
+              >
+                {link.label}
+                {isActive(link.to) && (
+                  <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600 rounded-full"></span>
+                )}
+              </Link>
+            ))}
           </div>
 
-          {/* User / Nút (Bên phải) */}
-          <div className="flex-shrink-0 w-1/4 flex justify-end items-center">
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="md:hidden p-2 rounded-xl text-slate-600 hover:bg-slate-100 transition-colors"
+            >
+              <span className="text-2xl">{isMobileMenuOpen ? "✕" : "☰"}</span>
+            </button>
+
             {!isLoggedIn ? (
               <Link
                 to="/login"
@@ -96,66 +125,77 @@ function Navbar() {
                   onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                   className="flex items-center gap-3 bg-slate-50 hover:bg-slate-100 border border-slate-200 px-4 py-2 rounded-full transition-colors"
                 >
-                  <div className="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold">
-                    👤
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-500 to-blue-400 text-white flex items-center justify-center font-bold text-sm shadow-sm">
+                    {userInitial}
                   </div>
-                  <span className="font-bold text-slate-700 hidden lg:inline-block">Tài khoản</span>
-                  <span className="text-xs text-slate-400">▼</span>
+                  <span className="font-bold text-slate-700 hidden lg:inline-block max-w-[120px] truncate">
+                    {userName || "Tài khoản"}
+                  </span>
+                  <span className={`text-xs text-slate-400 transition-transform ${isDropdownOpen ? "rotate-180" : ""}`}>▼</span>
                 </button>
 
-                {/* Dropdown Menu */}
                 {isDropdownOpen && (
-                  <div className="absolute right-0 mt-3 w-56 bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden py-2 animate-fade-in-up">
-                    <div className="px-4 py-3 border-b border-slate-50">
-                      <p className="text-sm font-bold text-slate-800">Xin chào!</p>
-                      <p className="text-xs text-slate-500">{userRole === 'admin' ? 'Quản trị viên' : 'Khách thuê phòng'}</p>
+                  <div className="absolute right-0 mt-3 w-64 bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden py-2 animate-fade-in-up">
+                    <div className="px-4 py-3 border-b border-slate-100">
+                      <p className="text-sm font-bold text-slate-800 truncate">{userName || "Xin chào!"}</p>
+                      <p className="text-xs text-slate-500 mt-0.5">
+                        {userRole === "admin" ? "Quản trị viên" : userRole === "chu_tro" ? "Chủ trọ" : "Khách thuê phòng"}
+                      </p>
                     </div>
 
-                    <div className="py-2 border-b border-slate-50">
+                    <div className="py-1 border-b border-slate-100">
                       {(userRole === "admin" || userRole === "chu_tro") && (
-                        <Link
-                          to="/quan-ly"
+                        <a
+                          href="/admin"
                           onClick={() => setIsDropdownOpen(false)}
-                          className="flex items-center gap-3 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-emerald-600 transition-colors"
+                          className="flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-emerald-600 transition-colors"
                         >
                           <span>⚙️</span> Quản trị hệ thống
-                        </Link>
+                        </a>
                       )}
                       
                       <Link
                         to="/tai-khoan"
                         onClick={() => setIsDropdownOpen(false)}
-                        className="flex items-center gap-3 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-blue-600 transition-colors"
+                        className={`flex items-center gap-3 px-4 py-2.5 text-sm font-semibold transition-colors ${
+                          isActive("/tai-khoan") ? "text-blue-600 bg-blue-50" : "text-slate-700 hover:bg-slate-50 hover:text-blue-600"
+                        }`}
                       >
                         <span>👤</span> Thông tin cá nhân
                       </Link>
                       <Link
                         to="/hoa-don-cua-toi"
                         onClick={() => setIsDropdownOpen(false)}
-                        className="flex items-center gap-3 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-blue-600 transition-colors"
+                        className={`flex items-center gap-3 px-4 py-2.5 text-sm font-semibold transition-colors ${
+                          location.pathname.startsWith("/hoa-don") ? "text-blue-600 bg-blue-50" : "text-slate-700 hover:bg-slate-50 hover:text-blue-600"
+                        }`}
                       >
                         <span>🧾</span> Hóa đơn của tôi
                       </Link>
                       <Link
                         to="/hop-dong-cua-toi"
                         onClick={() => setIsDropdownOpen(false)}
-                        className="flex items-center gap-3 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-blue-600 transition-colors"
+                        className={`flex items-center gap-3 px-4 py-2.5 text-sm font-semibold transition-colors ${
+                          isActive("/hop-dong-cua-toi") ? "text-blue-600 bg-blue-50" : "text-slate-700 hover:bg-slate-50 hover:text-blue-600"
+                        }`}
                       >
                         <span>📄</span> Hợp đồng thuê
                       </Link>
                       <Link
                         to="/yeu-cau-bao-duong"
                         onClick={() => setIsDropdownOpen(false)}
-                        className="flex items-center gap-3 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-amber-600 transition-colors"
+                        className={`flex items-center gap-3 px-4 py-2.5 text-sm font-semibold transition-colors ${
+                          isActive("/yeu-cau-bao-duong") ? "text-amber-600 bg-amber-50" : "text-slate-700 hover:bg-slate-50 hover:text-amber-600"
+                        }`}
                       >
                         <span>🛠️</span> Yêu cầu bảo trì
                       </Link>
                     </div>
 
-                    <div className="py-2">
+                    <div className="py-1">
                       <button
                         onClick={handleLogout}
-                        className="flex items-center gap-3 px-4 py-2 w-full text-left text-sm font-semibold text-rose-600 hover:bg-rose-50 transition-colors"
+                        className="flex items-center gap-3 px-4 py-2.5 w-full text-left text-sm font-semibold text-rose-600 hover:bg-rose-50 transition-colors"
                       >
                         <span>🚪</span> Đăng xuất
                       </button>
@@ -166,9 +206,29 @@ function Navbar() {
             )}
           </div>
         </div>
+
+        {isMobileMenuOpen && (
+          <div className="md:hidden border-t border-slate-100 py-4 animate-fade-in-up">
+            <div className="flex flex-col space-y-1">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.to}
+                  to={link.to}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className={`px-4 py-3 rounded-xl font-bold transition-colors ${
+                    isActive(link.to) ? "text-blue-600 bg-blue-50" : "text-slate-600 hover:bg-slate-50"
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </nav>
   );
 }
 
 export default Navbar;
+

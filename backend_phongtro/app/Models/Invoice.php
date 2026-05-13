@@ -11,7 +11,6 @@ class Invoice extends Model
 
     protected $table = 'tnmthoadon';
 
-    // Khớp 100% với các cột trong bảng invoices của file SQL
     protected $fillable = [
         'contract_id',
         'month',

@@ -7,7 +7,6 @@ function RoomDetail() {
   const [room, setRoom] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // State quản lý thư viện ảnh
   const [gallery, setGallery] = useState([]);
   const [activeIndex, setActiveIndex] = useState(0);
 
@@ -81,7 +80,6 @@ function RoomDetail() {
 
   return (
     <div className="w-full font-sans bg-slate-50 min-h-screen pb-20">
-      {/* Dynamic Background Header */}
       <div className="w-full h-64 md:h-80 bg-slate-900 relative overflow-hidden">
         <div className="absolute inset-0 opacity-20">
           <img src={gallery[0]} alt="Background blur" className="w-full h-full object-cover blur-md" />
@@ -91,7 +89,6 @@ function RoomDetail() {
 
       <div className="max-w-6xl mx-auto px-4 -mt-40 md:-mt-56 relative z-10 animate-fade-in-up">
         
-        {/* Navigation Bar */}
         <div className="mb-6 flex items-center justify-between">
           <Link
             to="/phong-tro"
@@ -106,11 +103,8 @@ function RoomDetail() {
 
         <div className="bg-white rounded-[2rem] md:rounded-[3rem] shadow-2xl shadow-slate-200/50 border border-slate-100 overflow-hidden">
           
-          {/* --- KHU VỰC THƯ VIỆN ẢNH --- */}
           <div className="flex flex-col relative group">
-            {/* Main Image Viewport */}
             <div className="h-[300px] md:h-[550px] w-full relative bg-slate-900 overflow-hidden">
-              {/* Image Track */}
               <div
                 className="flex w-full h-full transition-transform duration-700 ease-in-out"
                 style={{ transform: `translateX(-${activeIndex * 100}%)` }}
@@ -127,7 +121,6 @@ function RoomDetail() {
                 ))}
               </div>
 
-              {/* Status Badge */}
               <div className="absolute top-6 right-6 z-20">
                 <span
                   className={`px-6 py-2.5 text-sm font-black uppercase tracking-wider rounded-xl shadow-2xl backdrop-blur-md text-white border border-white/20 ${room.status === "available" ? "bg-emerald-500/90" : "bg-rose-500/90"}`}
@@ -136,7 +129,6 @@ function RoomDetail() {
                 </span>
               </div>
 
-              {/* Navigation Controls */}
               <button
                 onClick={prevImage}
                 className="absolute left-6 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/30 backdrop-blur-md text-white w-14 h-14 flex items-center justify-center rounded-2xl opacity-0 group-hover:opacity-100 transition-all duration-300 z-20 border border-white/20 hover:scale-110"
@@ -150,13 +142,11 @@ function RoomDetail() {
                 <span className="text-2xl font-bold ml-1">❯</span>
               </button>
 
-              {/* Image Counter */}
               <div className="absolute bottom-6 right-6 z-20 bg-black/40 backdrop-blur-md text-white px-4 py-2 rounded-xl text-sm font-bold border border-white/10">
                 {activeIndex + 1} / {gallery.length}
               </div>
             </div>
 
-            {/* Thumbnail Strip */}
             <div className="flex gap-4 p-6 bg-slate-50 border-b border-slate-100 overflow-x-auto scrollbar-hide">
               {gallery.map((img, index) => (
                 <div
@@ -177,7 +167,6 @@ function RoomDetail() {
             </div>
           </div>
 
-          {/* --- KHU VỰC THÔNG TIN CHI TIẾT --- */}
           <div className="p-8 md:p-12 lg:p-16">
             <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-10 pb-10 border-b border-slate-100 gap-6">
               <div>
@@ -198,7 +187,6 @@ function RoomDetail() {
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-              {/* Mô tả */}
               <div className="lg:col-span-2">
                 <h3 className="text-2xl font-extrabold text-slate-900 mb-6 flex items-center gap-3">
                   <span className="bg-blue-100 text-blue-600 w-10 h-10 rounded-xl flex items-center justify-center text-xl">📝</span>
@@ -217,7 +205,6 @@ function RoomDetail() {
                 </div>
               </div>
 
-              {/* Box Đặc điểm nổi bật */}
               <div>
                 <div className="bg-slate-50 p-8 rounded-[2rem] border border-slate-100 sticky top-28">
                   <h3 className="text-xl font-extrabold text-slate-900 mb-6 flex items-center gap-3">
@@ -248,9 +235,9 @@ function RoomDetail() {
                     </li>
                   </ul>
 
-                  <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-2xl transition-all shadow-lg shadow-blue-600/30 hover:shadow-xl hover:shadow-blue-600/40 transform hover:-translate-y-1 flex justify-center items-center gap-3 text-lg">
+                  <Link to="/lien-he" className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-2xl transition-all shadow-lg shadow-blue-600/30 hover:shadow-xl hover:shadow-blue-600/40 transform hover:-translate-y-1 flex justify-center items-center gap-3 text-lg">
                     <span>📱</span> Liên hệ Chủ Trọ
-                  </button>
+                  </Link>
                   <p className="text-center text-slate-500 text-sm mt-4 font-medium">Phản hồi nhanh trong vòng 30 phút</p>
                 </div>
               </div>

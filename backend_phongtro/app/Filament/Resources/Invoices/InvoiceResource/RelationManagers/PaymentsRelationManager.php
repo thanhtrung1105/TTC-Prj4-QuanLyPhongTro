@@ -17,8 +17,7 @@ use Filament\Actions\DeleteBulkAction;
 
 class PaymentsRelationManager extends RelationManager
 {
-    // Liên kết với hàm payments() trong Model Invoice
-    protected static string $relationship = 'payments'; 
+    protected static string $relationship = 'payments';
     protected static ?string $title = 'Lịch sử thanh toán';
 
     public function form(Schema $schema): Schema
@@ -29,7 +28,7 @@ class PaymentsRelationManager extends RelationManager
                     ->label('Số tiền thanh toán (VNĐ)')
                     ->required()
                     ->numeric(),
-                    
+
                 Select::make('payment_method')
                     ->label('Phương thức thanh toán')
                     ->options([
@@ -41,7 +40,7 @@ class PaymentsRelationManager extends RelationManager
                     ])
                     ->required()
                     ->default('bank_transfer'),
-                    
+
                 DateTimePicker::make('paid_at')
                     ->label('Thời gian thanh toán')
                     ->native(false)
@@ -60,7 +59,7 @@ class PaymentsRelationManager extends RelationManager
                     ->money('VND')
                     ->weight('bold')
                     ->color('success'),
-                    
+
                 TextColumn::make('payment_method')
                     ->label('Phương thức')
                     ->badge()
@@ -78,15 +77,13 @@ class PaymentsRelationManager extends RelationManager
                         'zalopay' => 'ZaloPay',
                         default => 'Khác',
                     }),
-                    
+
                 TextColumn::make('paid_at')
                     ->label('Thời gian')
                     ->dateTime('d/m/Y H:i')
                     ->sortable(),
             ])
-            ->filters([
-                //
-            ])
+            ->filters([])
             ->headerActions([
                 CreateAction::make()->label('Thêm thanh toán'),
             ])

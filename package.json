@@ -1,0 +1,6 @@
+{
+    "name": "ttc-prj4-root",
+    "scripts": {
+        "dev": "npx concurrently \"cd backend_phongtro && php artisan serve\" \"cd frontend_phongtro && npm run dev\""
+    }
+}

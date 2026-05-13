@@ -1,16 +1,15 @@
 <?php
 
-namespace App\Filament\Resources\Contracts; // <-- ĐÃ SỬA CHUẨN ĐƯỜNG DẪN THƯ MỤC
+namespace App\Filament\Resources\Contracts;
 
-use App\Filament\Resources\Contracts\Pages; // <-- ĐÃ SỬA CHUẨN ĐƯỜNG DẪN PAGES
+use App\Filament\Resources\Contracts\Pages;
 use App\Models\Contract;
 use Filament\Resources\Resource;
-use Filament\Schemas\Schema; 
+use Filament\Schemas\Schema;
 use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Textarea;
 use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Actions\EditAction;
@@ -26,6 +25,7 @@ class ContractResource extends Resource
     protected static ?string $navigationLabel = 'Hợp Đồng';
     protected static ?string $modelLabel = 'Hợp đồng';
     protected static ?string $pluralModelLabel = 'Danh sách Hợp đồng';
+    protected static string|\UnitEnum|null $navigationGroup = 'Quản lý Thuê';
 
     public static function form(Schema $schema): Schema
     {
@@ -44,7 +44,7 @@ class ContractResource extends Resource
 
                         Select::make('tenant_id')
                             ->label('Chọn Khách thuê')
-                            ->relationship('tenant', 'full_name')
+                            ->relationship('tenant', 'fullname')
                             ->searchable()
                             ->preload()
                             ->required(),
@@ -71,8 +71,8 @@ class ContractResource extends Resource
                             ->required()
                             ->step(100000),
 
-                        TextInput::make('rental_price')
-                            ->label('Giá thuê chốt (VNĐ/Tháng)')
+                        TextInput::make('monthly_price')
+                            ->label('Giá thuê (VNĐ/Tháng)')
                             ->numeric()
                             ->required()
                             ->step(100000),
@@ -86,11 +86,6 @@ class ContractResource extends Resource
                             ])
                             ->default('active')
                             ->required(),
-
-                        Textarea::make('notes')
-                            ->label('Ghi chú thêm')
-                            ->columnSpanFull()
-                            ->rows(3),
                     ])
             ]);
     }
@@ -106,7 +101,7 @@ class ContractResource extends Resource
                     ->weight('bold')
                     ->color('primary'),
 
-                TextColumn::make('tenant.full_name')
+                TextColumn::make('tenant.fullname')
                     ->label('Khách thuê')
                     ->searchable()
                     ->sortable(),
@@ -118,6 +113,11 @@ class ContractResource extends Resource
 
                 TextColumn::make('deposit_amount')
                     ->label('Tiền cọc')
+                    ->money('VND')
+                    ->sortable(),
+
+                TextColumn::make('monthly_price')
+                    ->label('Giá thuê/tháng')
                     ->money('VND')
                     ->sortable(),
 
@@ -137,9 +137,7 @@ class ContractResource extends Resource
                         default => $state,
                     }),
             ])
-            ->filters([
-                //
-            ])
+            ->filters([])
             ->recordActions([
                 EditAction::make()->label('Sửa'),
                 DeleteAction::make()->label('Xóa'),

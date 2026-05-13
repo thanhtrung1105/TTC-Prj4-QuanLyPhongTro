@@ -8,12 +8,40 @@ use Illuminate\Http\Request;
 
 class RoomController extends Controller
 {
-    public function getAvailableRooms()
+    public function getAvailableRooms(Request $request)
     {
-        // Lấy tất cả các phòng đang có trạng thái là 'available'
-        $rooms = Room::where('status', 'available')->get();
+        $query = Room::where('status', 'available');
 
-        // Trả về dữ liệu dưới dạng JSON (Chuẩn giao tiếp API)
+        if ($request->filled('keyword')) {
+            $keyword = $request->keyword;
+            $query->where(function ($q) use ($keyword) {
+                $q->where('room_number', 'like', "%{$keyword}%")
+                  ->orWhere('description', 'like', "%{$keyword}%");
+            });
+        }
+
+        if ($request->filled('floor')) {
+            $query->where('floor', $request->floor);
+        }
+
+        if ($request->filled('min_area')) {
+            $query->where('area', '>=', $request->min_area);
+        }
+
+        if ($request->filled('max_area')) {
+            $query->where('area', '<=', $request->max_area);
+        }
+
+        if ($request->filled('min_price')) {
+            $query->where('base_price', '>=', $request->min_price);
+        }
+
+        if ($request->filled('max_price')) {
+            $query->where('base_price', '<=', $request->max_price);
+        }
+
+        $rooms = $query->orderBy('base_price', 'asc')->get();
+
         return response()->json([
             'success' => true,
             'message' => 'Lấy danh sách phòng trống thành công!',
@@ -21,13 +49,11 @@ class RoomController extends Controller
             'data'    => $rooms
         ], 200);
     }
-    
+
     public function getRoomDetail($id)
     {
-        // Tìm phòng theo ID
-        $room = \App\Models\Room::find($id);
+        $room = Room::with('utilities')->find($id);
 
-        // Nếu không tìm thấy phòng
         if (!$room) {
             return response()->json([
                 'success' => false,
@@ -35,7 +61,6 @@ class RoomController extends Controller
             ], 404);
         }
 
-        // Nếu tìm thấy, trả về dữ liệu
         return response()->json([
             'success' => true,
             'data'    => $room

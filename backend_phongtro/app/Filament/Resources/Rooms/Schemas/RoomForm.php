@@ -7,7 +7,7 @@ use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\FileUpload; // <-- IMPORT CÔNG CỤ UPLOAD ẢNH
+use Filament\Forms\Components\FileUpload;
 use Illuminate\Database\Eloquent\Builder;
 
 class RoomForm
@@ -33,19 +33,19 @@ class RoomForm
                             ->label('Mã phòng (VD: P101)')
                             ->required()
                             ->maxLength(255),
-                        
+
                         TextInput::make('floor')
                             ->label('Tầng')
                             ->required()
                             ->numeric()
                             ->minValue(1),
-                            
+
                         TextInput::make('area')
                             ->label('Diện tích (m²)')
                             ->required()
                             ->numeric()
                             ->minValue(1),
-                            
+
                         TextInput::make('base_price')
                             ->label('Giá thuê (VNĐ)')
                             ->required()
@@ -54,19 +54,18 @@ class RoomForm
                             ->step(100000),
                     ]),
 
-                // --- KHU VỰC UPLOAD ẢNH MỚI ĐƯỢC THÊM VÀO ĐÂY ---
                 Section::make('Hình ảnh phòng trọ')
                     ->icon('heroicon-o-camera')
                     ->schema([
-                        FileUpload::make('image')
+                        FileUpload::make('images')
                             ->label('Ảnh đại diện phòng')
-                            ->image() // Chỉ cho phép up file ảnh
-                            ->imageEditor() // Tích hợp sẵn công cụ cắt/xoay ảnh
-                            ->directory('room-images') // Ảnh sẽ lưu vào thư mục này
+                            ->image()
+                            ->imageEditor()
+                            ->multiple()
+                            ->directory('room-images')
                             ->visibility('public')
                             ->columnSpanFull(),
                     ]),
-                // -------------------------------------------------
 
                 Section::make('Trạng thái & Mô tả')
                     ->icon('heroicon-o-clipboard-document-list')
@@ -81,9 +80,9 @@ class RoomForm
                             ->required()
                             ->default('available')
                             ->native(false),
-                            
+
                         Textarea::make('description')
-                            ->label('Mô tả chi tiết (Nội thất, tiện ích...)')
+                            ->label('Mô tả chi tiết')
                             ->rows(4)
                             ->columnSpanFull(),
                     ])

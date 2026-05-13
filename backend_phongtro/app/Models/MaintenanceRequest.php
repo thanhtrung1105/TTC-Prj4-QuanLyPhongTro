@@ -21,13 +21,11 @@ class MaintenanceRequest extends Model
         'actual_cost',
     ];
 
-    // Nối với bảng Phòng
     public function room()
     {
         return $this->belongsTo(Room::class);
     }
 
-    // Nối với bảng Khách thuê
     public function tenant()
     {
         return $this->belongsTo(Tenant::class);

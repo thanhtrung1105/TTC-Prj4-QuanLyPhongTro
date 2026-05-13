@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class RoomUtility extends Model
 {
     use HasFactory;
-    
+
     protected $table = 'tnmttienichphong';
 
     protected $fillable = [

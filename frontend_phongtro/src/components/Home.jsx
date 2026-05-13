@@ -1,9 +1,10 @@
 import { Link } from "react-router-dom";
 
 function Home() {
+  const isLoggedIn = !!localStorage.getItem("token");
+
   return (
     <div className="w-full font-sans overflow-x-hidden">
-      {/* Hero Section */}
       <section 
         className="relative min-h-[90vh] flex items-center justify-center pt-20 pb-40 px-4"
         style={{
@@ -13,7 +14,6 @@ function Home() {
           backgroundRepeat: 'no-repeat'
         }}
       >
-        {/* Lớp phủ Gradient Glassmorphism */}
         <div className="absolute inset-0 bg-gradient-to-r from-slate-900/95 via-slate-900/70 to-slate-900/10"></div>
         
         <div className="relative z-10 max-w-7xl mx-auto w-full flex flex-col items-start animate-fade-in-up">
@@ -50,7 +50,6 @@ function Home() {
           </div>
         </div>
 
-        {/* Floating Stats Bar */}
         <div className="absolute bottom-0 left-0 right-0 transform translate-y-1/2 px-4 z-20">
           <div className="max-w-5xl mx-auto bg-white rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.1)] p-8 md:p-10 grid grid-cols-1 md:grid-cols-3 gap-8 divide-y md:divide-y-0 md:divide-x divide-slate-100 border border-slate-50">
             <div className="text-center pt-4 md:pt-0">
@@ -69,7 +68,6 @@ function Home() {
         </div>
       </section>
 
-      {/* Features Section */}
       <section className="pt-40 pb-24 px-4 bg-slate-50">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-20">
@@ -78,7 +76,6 @@ function Home() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10">
-            {/* Feature 1 */}
             <div className="bg-white p-10 rounded-[2rem] shadow-sm border border-slate-100 hover:shadow-2xl transition-all duration-300 group hover:-translate-y-3">
               <div className="w-20 h-20 rounded-2xl bg-gradient-to-tr from-blue-100 to-blue-50 text-blue-600 flex items-center justify-center text-4xl mb-8 group-hover:scale-110 group-hover:rotate-3 transition-transform shadow-sm">
                 📱
@@ -87,7 +84,6 @@ function Home() {
               <p className="text-slate-600 leading-relaxed font-medium">Xem hợp đồng, hóa đơn và gửi báo cáo sự cố hư hỏng hoàn toàn qua điện thoại. Không cần gặp mặt trực tiếp chủ nhà.</p>
             </div>
 
-            {/* Feature 2 */}
             <div className="bg-white p-10 rounded-[2rem] shadow-sm border border-slate-100 hover:shadow-2xl transition-all duration-300 group hover:-translate-y-3 relative overflow-hidden">
               <div className="absolute -top-10 -right-10 p-4 opacity-[0.03] group-hover:opacity-10 transition-opacity">
                 <span className="text-[12rem]">💳</span>
@@ -101,7 +97,6 @@ function Home() {
               </div>
             </div>
 
-            {/* Feature 3 */}
             <div className="bg-white p-10 rounded-[2rem] shadow-sm border border-slate-100 hover:shadow-2xl transition-all duration-300 group hover:-translate-y-3">
               <div className="w-20 h-20 rounded-2xl bg-gradient-to-tr from-purple-100 to-purple-50 text-purple-600 flex items-center justify-center text-4xl mb-8 group-hover:scale-110 group-hover:rotate-3 transition-transform shadow-sm">
                 🛡️
@@ -113,18 +108,40 @@ function Home() {
         </div>
       </section>
 
-      {/* Call to action */}
       <section className="py-24 px-4 bg-slate-900 text-center relative overflow-hidden">
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-blue-600 rounded-full blur-[120px] opacity-20"></div>
         <div className="relative z-10 max-w-4xl mx-auto">
-          <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-6">Bạn đã sẵn sàng dọn đến?</h2>
-          <p className="text-xl text-slate-300 mb-10">Đừng bỏ lỡ những căn phòng có view đẹp và giá tốt nhất. Đăng nhập để giữ chỗ!</p>
-          <Link
-            to="/login"
-            className="inline-block bg-white text-slate-900 px-10 py-5 rounded-2xl font-bold text-xl shadow-xl hover:bg-slate-100 transition-colors transform hover:-translate-y-1"
-          >
-            Đăng Nhập Ngay →
-          </Link>
+          {isLoggedIn ? (
+            <>
+              <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-6">Chào mừng bạn trở lại! 👋</h2>
+              <p className="text-xl text-slate-300 mb-10">Quản lý hóa đơn, hợp đồng và yêu cầu bảo trì ngay từ bảng điều khiển của bạn.</p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Link
+                  to="/hoa-don-cua-toi"
+                  className="inline-block bg-white text-slate-900 px-10 py-5 rounded-2xl font-bold text-xl shadow-xl hover:bg-slate-100 transition-colors transform hover:-translate-y-1"
+                >
+                  🧾 Xem Hóa Đơn
+                </Link>
+                <Link
+                  to="/yeu-cau-bao-duong"
+                  className="inline-block bg-white/10 backdrop-blur-md text-white border border-white/30 px-10 py-5 rounded-2xl font-bold text-xl hover:bg-white/20 transition-colors transform hover:-translate-y-1"
+                >
+                  🛠️ Yêu Cầu Bảo Trì
+                </Link>
+              </div>
+            </>
+          ) : (
+            <>
+              <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-6">Bạn đã sẵn sàng dọn đến?</h2>
+              <p className="text-xl text-slate-300 mb-10">Đừng bỏ lỡ những căn phòng có view đẹp và giá tốt nhất. Đăng nhập để giữ chỗ!</p>
+              <Link
+                to="/login"
+                className="inline-block bg-white text-slate-900 px-10 py-5 rounded-2xl font-bold text-xl shadow-xl hover:bg-slate-100 transition-colors transform hover:-translate-y-1"
+              >
+                Đăng Nhập Ngay →
+              </Link>
+            </>
+          )}
         </div>
       </section>
     </div>
@@ -132,3 +149,4 @@ function Home() {
 }
 
 export default Home;
+

@@ -12,16 +12,11 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
-
-// 1. TRẢ LẠI ĐÚNG ĐƯỜNG DẪN NGUYÊN BẢN CỦA BẠN (BỎ QUA NẾU VSCODE BÁO ĐỎ)
 use Filament\Actions\EditAction;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
-
-// 2. CHỈ THÊM DUY NHẤT THẰNG NÀY ĐỂ TẠO NÚT IN PDF
 use Filament\Tables\Actions\Action;
-
 use App\Filament\Resources\Invoices\InvoiceResource\RelationManagers\DetailsRelationManager;
 use App\Filament\Resources\Invoices\InvoiceResource\RelationManagers\PaymentsRelationManager;
 
@@ -33,6 +28,7 @@ class InvoiceResource extends Resource
     protected static ?string $navigationLabel = 'Hóa Đơn';
     protected static ?string $modelLabel = 'Hóa đơn';
     protected static ?string $pluralModelLabel = 'Danh sách Hóa đơn';
+    protected static string|\UnitEnum|null $navigationGroup = 'Quản lý Thuê';
 
     public static function form(Schema $schema): Schema
     {
@@ -125,9 +121,7 @@ class InvoiceResource extends Resource
                     ->dateTime('d/m/Y H:i')
                     ->sortable(),
             ])
-            ->filters([
-                //
-            ])
+            ->filters([])
             ->recordActions([
                 EditAction::make()->label('Sửa'),
                 DeleteAction::make()->label('Xóa'),

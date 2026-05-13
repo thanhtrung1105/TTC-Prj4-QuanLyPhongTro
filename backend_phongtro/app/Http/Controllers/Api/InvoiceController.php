@@ -10,26 +10,23 @@ class InvoiceController extends Controller
 {
     public function getMyInvoices(Request $request)
     {
-        // 1. Lấy ID của tài khoản đang đăng nhập (khớp với bảng tnmtnguoidung)
         $userId = $request->user()->id;
 
-        // 2. Trích xuất hóa đơn từ Database gốc bằng lệnh JOIN 3 bảng
         $invoices = DB::table('tnmthoadon')
             ->join('tnmthopdong', 'tnmthoadon.contract_id', '=', 'tnmthopdong.id')
             ->join('tnmtkhachthue', 'tnmthopdong.tenant_id', '=', 'tnmtkhachthue.id')
             ->where('tnmtkhachthue.user_id', $userId)
             ->select(
-                'tnmthoadon.id', 
-                'tnmthoadon.month', 
-                'tnmthoadon.year', 
-                'tnmthoadon.total_amount', 
+                'tnmthoadon.id',
+                'tnmthoadon.month',
+                'tnmthoadon.year',
+                'tnmthoadon.total_amount',
                 'tnmthoadon.status'
             )
             ->orderBy('tnmthoadon.year', 'desc')
             ->orderBy('tnmthoadon.month', 'desc')
             ->get();
 
-        // 3. Trả dữ liệu về dạng JSON để React đọc được
         return response()->json([
             'success' => true,
             'data' => $invoices
@@ -48,7 +45,7 @@ class InvoiceController extends Controller
 
         if (!$invoice) {
             return response()->json([
-                'success' => false, 
+                'success' => false,
                 'message' => 'Không tìm thấy hóa đơn hoặc bạn không có quyền truy cập.'
             ], 404);
         }
@@ -82,8 +79,6 @@ class InvoiceController extends Controller
         ]);
 
         $amount = $request->amount;
-        
-        // Tính tổng đã trả
         $paidAmount = \App\Models\Payment::where('invoice_id', $id)->sum('amount');
         $remaining = $invoice->total_amount - $paidAmount;
 
@@ -91,7 +86,6 @@ class InvoiceController extends Controller
             return response()->json(['success' => false, 'message' => 'Số tiền thanh toán vượt quá số nợ còn lại.'], 400);
         }
 
-        // Lưu lịch sử thanh toán
         \App\Models\Payment::create([
             'invoice_id' => $id,
             'amount' => $amount,
@@ -99,7 +93,6 @@ class InvoiceController extends Controller
             'paid_at' => now(),
         ]);
 
-        // Kiểm tra nếu đã trả đủ thì update status
         $newPaidAmount = $paidAmount + $amount;
         if ($newPaidAmount >= $invoice->total_amount) {
             $invoice->status = 'paid';

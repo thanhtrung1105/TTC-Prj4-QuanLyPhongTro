@@ -3,15 +3,12 @@
 namespace App\Providers\Filament;
 
 use Filament\Http\Middleware\Authenticate;
-use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
-use Filament\Widgets\AccountWidget;
-use Filament\Widgets\FilamentInfoWidget;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
@@ -28,27 +25,22 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
-            
-            // 1. ĐỔI TÊN THƯƠNG HIỆU
-            ->brandName('Quản Lý Trọ TNMT') 
-            
-            // 2. ĐỔI FONT CHỮ HIỆN ĐẠI (Tự động tải Google Font)
-            ->font('Inter') 
-            
-            // 3. ĐỔI MÀU SẮC CHỦ ĐẠO
+            ->brandName('PhòngTrọ TNMT')
+            ->font('Inter')
             ->colors([
-                'primary' => \Filament\Support\Colors\Color::Blue, // Màu xanh dương đậm chất công nghệ
-                'danger' => \Filament\Support\Colors\Color::Rose,
-                'success' => \Filament\Support\Colors\Color::Emerald,
-                'warning' => \Filament\Support\Colors\Color::Orange,
+                'primary' => Color::Indigo,
+                'danger' => Color::Rose,
+                'success' => Color::Emerald,
+                'warning' => Color::Amber,
+                'info' => Color::Sky,
             ])
-            
-            // 4. CHO PHÉP THU GỌN MENUBAR BÊN TRÁI (Chuẩn UI xịn)
-            ->sidebarCollapsibleOnDesktop() 
-            
-            // (Tùy chọn) Nếu thích menu nằm ngang trên cùng thay vì bên trái, bỏ comment dòng dưới:
-            // ->topNavigation() 
-
+            ->sidebarCollapsibleOnDesktop()
+            ->maxContentWidth('full')
+            ->navigationGroups([
+                'Quản lý Phòng',
+                'Quản lý Thuê',
+                'Vận hành',
+            ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([
@@ -56,22 +48,21 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
-                // Đăng ký 2 cái Widget thống kê của chúng ta ở đây
                 \App\Filament\Widgets\StatsOverview::class,
                 \App\Filament\Widgets\RevenueChart::class,
             ])
             ->middleware([
-                \Illuminate\Cookie\Middleware\EncryptCookies::class,
-                \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
-                \Illuminate\Session\Middleware\StartSession::class,
-                \Illuminate\View\Middleware\ShareErrorsFromSession::class,
+                EncryptCookies::class,
+                AddQueuedCookiesToResponse::class,
+                StartSession::class,
+                ShareErrorsFromSession::class,
                 \Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class,
-                \Illuminate\Routing\Middleware\SubstituteBindings::class,
-                \Filament\Http\Middleware\DisableBladeIconComponents::class,
-                \Filament\Http\Middleware\DispatchServingFilamentEvent::class,
+                SubstituteBindings::class,
+                DisableBladeIconComponents::class,
+                DispatchServingFilamentEvent::class,
             ])
             ->authMiddleware([
-                \Filament\Http\Middleware\Authenticate::class,
+                Authenticate::class,
             ]);
     }
 }

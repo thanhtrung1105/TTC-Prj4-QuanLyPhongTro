@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('tenants', function (Blueprint $table) {
             $table->id();
-            $table->string('full_name'); // Họ và tên
+            $table->string('fullname'); // Họ và tên
             $table->string('cccd')->unique(); // Số CCCD (Không được trùng nhau)
             $table->string('phone'); // Số điện thoại
             $table->string('email')->nullable(); // Email (có thể bỏ trống)

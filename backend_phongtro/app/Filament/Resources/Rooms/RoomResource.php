@@ -19,12 +19,9 @@ class RoomResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-home-modern';
     protected static ?string $navigationLabel = 'Quản lý Phòng';
-    
-    // --- 2 DÒNG MỚI ĐỂ VIỆT HÓA TIÊU ĐỀ VÀ NÚT BẤM ---
     protected static ?string $modelLabel = 'Phòng trọ';
     protected static ?string $pluralModelLabel = 'Danh sách Phòng trọ';
-    // -------------------------------------------------
-
+    protected static string|\UnitEnum|null $navigationGroup = 'Quản lý Phòng';
     protected static ?string $recordTitleAttribute = 'room_number';
 
     public static function form(Schema $schema): Schema

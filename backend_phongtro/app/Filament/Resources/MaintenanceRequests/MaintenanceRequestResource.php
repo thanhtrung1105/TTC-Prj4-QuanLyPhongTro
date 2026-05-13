@@ -8,7 +8,7 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Schemas\Components\Section; // <-- ĐÃ SỬA CHUẨN ĐƯỜNG DẪN FILAMENT V5 Ở ĐÂY
+use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
@@ -25,6 +25,7 @@ class MaintenanceRequestResource extends Resource
     protected static ?string $navigationLabel = 'Bảo trì & Sửa chữa';
     protected static ?string $modelLabel = 'Yêu cầu bảo trì';
     protected static ?string $pluralModelLabel = 'Danh sách Yêu cầu';
+    protected static string|\UnitEnum|null $navigationGroup = 'Vận hành';
 
     public static function form(Schema $schema): Schema
     {
@@ -40,11 +41,11 @@ class MaintenanceRequestResource extends Resource
 
                         Select::make('tenant_id')
                             ->label('Khách báo cáo')
-                            ->relationship('tenant', 'full_name')
+                            ->relationship('tenant', 'fullname')
                             ->required(),
 
                         TextInput::make('title')
-                            ->label('Tóm tắt sự cố (VD: Hỏng vòi nước)')
+                            ->label('Tóm tắt sự cố')
                             ->required()
                             ->columnSpanFull(),
 
@@ -90,7 +91,7 @@ class MaintenanceRequestResource extends Resource
                     ->weight('bold')
                     ->sortable(),
 
-                TextColumn::make('tenant.full_name')
+                TextColumn::make('tenant.fullname')
                     ->label('Người báo')
                     ->searchable(),
 
@@ -127,9 +128,7 @@ class MaintenanceRequestResource extends Resource
                     ->dateTime('d/m/Y')
                     ->sortable(),
             ])
-            ->filters([
-                //
-            ])
+            ->filters([])
             ->recordActions([
                 EditAction::make()->label('Cập nhật'),
                 DeleteAction::make()->label('Xóa'),
@@ -143,9 +142,7 @@ class MaintenanceRequestResource extends Resource
 
     public static function getRelations(): array
     {
-        return [
-            //
-        ];
+        return [];
     }
 
     public static function getPages(): array

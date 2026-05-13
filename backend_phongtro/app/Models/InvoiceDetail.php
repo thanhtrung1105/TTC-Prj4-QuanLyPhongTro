@@ -19,7 +19,6 @@ class InvoiceDetail extends Model
         'amount',
     ];
 
-    // 1 Chi tiết thuộc về 1 Hóa đơn
     public function invoice()
     {
         return $this->belongsTo(Invoice::class);
