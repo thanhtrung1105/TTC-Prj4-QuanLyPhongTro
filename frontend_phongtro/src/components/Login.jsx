@@ -32,7 +32,7 @@ function Login() {
           localStorage.setItem("role", userData.role);
         }
 
-        navigate("/hoa-don-cua-toi");
+        navigate("/");
       } else {
         setError("Đăng nhập thất bại: Không nhận được Thẻ xác thực (Token)!");
       }

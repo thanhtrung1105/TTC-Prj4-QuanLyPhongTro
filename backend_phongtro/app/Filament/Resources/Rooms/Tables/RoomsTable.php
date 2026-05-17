@@ -79,7 +79,18 @@ class RoomsTable
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
-            ->filters([])
+            ->filters([
+                \Filament\Tables\Filters\SelectFilter::make('status')
+                    ->label('Trạng thái')
+                    ->options([
+                        'available' => 'Còn trống',
+                        'occupied' => 'Đã thuê',
+                        'maintenance' => 'Bảo trì',
+                    ]),
+                \Filament\Tables\Filters\SelectFilter::make('floor')
+                    ->label('Tầng')
+                    ->options(fn () => \App\Models\Room::distinct()->orderBy('floor')->pluck('floor', 'floor')->toArray()),
+            ])
             ->recordActions([
                 EditAction::make()->label('Sửa'),
             ])

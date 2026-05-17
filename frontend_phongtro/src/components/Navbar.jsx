@@ -146,7 +146,9 @@ function Navbar() {
                     <div className="py-1 border-b border-slate-100">
                       {(userRole === "admin" || userRole === "chu_tro") && (
                         <a
-                          href="/admin"
+                          href="http://127.0.0.1:8000/admin"
+                          target="_blank"
+                          rel="noopener noreferrer"
                           onClick={() => setIsDropdownOpen(false)}
                           className="flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-emerald-600 transition-colors"
                         >
@@ -222,6 +224,68 @@ function Navbar() {
                   {link.label}
                 </Link>
               ))}
+
+              {isLoggedIn && (
+                <>
+                  <div className="border-t border-slate-100 my-2"></div>
+                  <Link
+                    to="/tai-khoan"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className={`px-4 py-3 rounded-xl font-bold transition-colors flex items-center gap-3 ${
+                      isActive("/tai-khoan") ? "text-blue-600 bg-blue-50" : "text-slate-600 hover:bg-slate-50"
+                    }`}
+                  >
+                    <span>👤</span> Tài khoản
+                  </Link>
+                  <Link
+                    to="/hoa-don-cua-toi"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className={`px-4 py-3 rounded-xl font-bold transition-colors flex items-center gap-3 ${
+                      location.pathname.startsWith("/hoa-don") ? "text-blue-600 bg-blue-50" : "text-slate-600 hover:bg-slate-50"
+                    }`}
+                  >
+                    <span>🧾</span> Hóa đơn
+                  </Link>
+                  <Link
+                    to="/hop-dong-cua-toi"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className={`px-4 py-3 rounded-xl font-bold transition-colors flex items-center gap-3 ${
+                      isActive("/hop-dong-cua-toi") ? "text-blue-600 bg-blue-50" : "text-slate-600 hover:bg-slate-50"
+                    }`}
+                  >
+                    <span>📄</span> Hợp đồng
+                  </Link>
+                  <Link
+                    to="/yeu-cau-bao-duong"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className={`px-4 py-3 rounded-xl font-bold transition-colors flex items-center gap-3 ${
+                      isActive("/yeu-cau-bao-duong") ? "text-amber-600 bg-amber-50" : "text-slate-600 hover:bg-slate-50"
+                    }`}
+                  >
+                    <span>🛠️</span> Bảo trì
+                  </Link>
+                  <div className="border-t border-slate-100 my-2"></div>
+                  <button
+                    onClick={() => { setIsMobileMenuOpen(false); handleLogout(); }}
+                    className="px-4 py-3 rounded-xl font-bold text-rose-600 hover:bg-rose-50 transition-colors flex items-center gap-3 text-left w-full"
+                  >
+                    <span>🚪</span> Đăng xuất
+                  </button>
+                </>
+              )}
+
+              {!isLoggedIn && (
+                <>
+                  <div className="border-t border-slate-100 my-2"></div>
+                  <Link
+                    to="/login"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="px-4 py-3 rounded-xl font-bold text-blue-600 bg-blue-50 hover:bg-blue-100 transition-colors text-center"
+                  >
+                    Đăng Nhập
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         )}

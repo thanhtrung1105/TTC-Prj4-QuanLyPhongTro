@@ -36,8 +36,9 @@ function MyInvoices() {
 
   if (loading) {
     return (
-      <div className="text-center py-20 text-lg font-semibold">
-        ⏳ Đang tải hóa đơn của bạn...
+      <div className="flex flex-col items-center justify-center min-h-[60vh]">
+        <div className="w-16 h-16 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin mb-4"></div>
+        <div className="text-xl font-bold text-slate-600">Đang tải hóa đơn của bạn...</div>
       </div>
     );
   }

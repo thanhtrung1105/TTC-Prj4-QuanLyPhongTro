@@ -58,10 +58,12 @@ class RoomForm
                     ->icon('heroicon-o-camera')
                     ->schema([
                         FileUpload::make('images')
-                            ->label('Ảnh đại diện phòng')
+                            ->label('Ảnh phòng (ảnh đầu tiên = ảnh đại diện)')
                             ->image()
                             ->imageEditor()
                             ->multiple()
+                            ->reorderable()
+                            ->appendFiles()
                             ->directory('room-images')
                             ->visibility('public')
                             ->columnSpanFull(),

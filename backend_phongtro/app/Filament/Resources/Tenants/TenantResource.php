@@ -61,6 +61,13 @@ class TenantResource extends Resource
                             ->columnSpanFull()
                             ->maxLength(255),
 
+                        Select::make('user_id')
+                            ->label('Tài khoản đăng nhập')
+                            ->relationship('user', 'email')
+                            ->searchable()
+                            ->preload()
+                            ->placeholder('Chọn tài khoản liên kết (nếu có)'),
+
                         Select::make('status')
                             ->label('Trạng thái')
                             ->options([

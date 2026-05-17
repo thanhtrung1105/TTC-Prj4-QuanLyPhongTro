@@ -130,6 +130,7 @@ class InvoiceResource extends Resource
                     ->icon('heroicon-o-printer')
                     ->color('success')
                     ->action(function ($record) {
+                        $record->load(['details', 'contract.room', 'contract.tenant']);
                         $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('pdf.invoice', ['invoice' => $record]);
                         return response()->streamDownload(
                             fn () => print($pdf->output()),

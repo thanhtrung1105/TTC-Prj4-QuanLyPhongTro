@@ -40,6 +40,8 @@ function RoomDetail() {
       });
   }, [id]);
 
+  const formatPrice = (price) => Number(price).toLocaleString("vi-VN");
+
   const nextImage = () => {
     setActiveIndex((prevIndex) =>
       prevIndex === gallery.length - 1 ? 0 : prevIndex + 1,
@@ -76,7 +78,6 @@ function RoomDetail() {
       </div>
     );
 
-  const formatPrice = (price) => Number(price).toLocaleString("vi-VN");
 
   return (
     <div className="w-full font-sans bg-slate-50 min-h-screen pb-20">
@@ -203,9 +204,28 @@ function RoomDetail() {
                     </p>
                   )}
                 </div>
+
+                {room.utilities && room.utilities.length > 0 && (
+                  <div className="mt-10">
+                    <h3 className="text-2xl font-extrabold text-slate-900 mb-6 flex items-center gap-3">
+                      <span className="bg-emerald-100 text-emerald-600 w-10 h-10 rounded-xl flex items-center justify-center text-xl">🛋️</span>
+                      Tiện ích phòng
+                    </h3>
+                    <div className="flex flex-wrap gap-3">
+                      {room.utilities.map((util) => (
+                        <span
+                          key={util.id}
+                          className="inline-flex items-center gap-2 bg-emerald-50 text-emerald-700 px-4 py-2.5 rounded-2xl font-bold text-sm border border-emerald-100 hover:bg-emerald-100 transition-colors"
+                        >
+                          <span>✓</span> {util.utility_name}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
 
-              <div>
+              <div className="space-y-8">
                 <div className="bg-slate-50 p-8 rounded-[2rem] border border-slate-100 sticky top-28">
                   <h3 className="text-xl font-extrabold text-slate-900 mb-6 flex items-center gap-3">
                     <span className="bg-amber-100 text-amber-600 w-10 h-10 rounded-xl flex items-center justify-center text-xl">✨</span>
@@ -240,6 +260,35 @@ function RoomDetail() {
                   </Link>
                   <p className="text-center text-slate-500 text-sm mt-4 font-medium">Phản hồi nhanh trong vòng 30 phút</p>
                 </div>
+
+                <div className="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-lg shadow-slate-200/50">
+                    <h3 className="text-lg font-extrabold text-slate-900 mb-4 flex items-center gap-3">
+                      <span className="bg-blue-100 text-blue-600 w-10 h-10 rounded-xl flex items-center justify-center text-xl">💰</span>
+                      Báo Giá Dịch Vụ
+                    </h3>
+                    <div className="space-y-2.5">
+                      <div className="flex items-center justify-between p-3 bg-amber-50 rounded-xl border border-amber-100">
+                        <span className="flex items-center gap-2 font-bold text-slate-700"><span className="text-lg">⚡</span> Tiền điện</span>
+                        <span className="font-black text-amber-600">3.500 đ/kWh</span>
+                      </div>
+                      <div className="flex items-center justify-between p-3 bg-sky-50 rounded-xl border border-sky-100">
+                        <span className="flex items-center gap-2 font-bold text-slate-700"><span className="text-lg">💧</span> Tiền nước</span>
+                        <span className="font-black text-sky-600">15.000 đ/m³</span>
+                      </div>
+                      <div className="flex items-center justify-between p-3 bg-violet-50 rounded-xl border border-violet-100">
+                        <span className="flex items-center gap-2 font-bold text-slate-700"><span className="text-lg">📶</span> Internet</span>
+                        <span className="font-black text-violet-600">100.000 đ/tháng</span>
+                      </div>
+                      <div className="flex items-center justify-between p-3 bg-emerald-50 rounded-xl border border-emerald-100">
+                        <span className="flex items-center gap-2 font-bold text-slate-700"><span className="text-lg">🧹</span> Dịch vụ</span>
+                        <span className="font-black text-emerald-600">30.000 đ/tháng</span>
+                      </div>
+                      <div className="flex items-center justify-between p-3 bg-rose-50 rounded-xl border border-rose-100">
+                        <span className="flex items-center gap-2 font-bold text-slate-700"><span className="text-lg">🏍️</span> Giữ xe</span>
+                        <span className="font-black text-rose-600">50.000 đ/tháng</span>
+                      </div>
+                    </div>
+                  </div>
               </div>
             </div>
           </div>

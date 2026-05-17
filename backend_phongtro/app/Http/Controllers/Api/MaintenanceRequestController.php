@@ -65,6 +65,18 @@ class MaintenanceRequestController extends Controller
             ], 400);
         }
 
+        $todayCount = DB::table('tnmtyeucaubaoduong')
+            ->where('tenant_id', $tenant->id)
+            ->whereDate('created_at', now()->toDateString())
+            ->count();
+
+        if ($todayCount >= 3) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Bạn đã gửi tối đa 3 yêu cầu trong hôm nay. Vui lòng thử lại vào ngày mai.'
+            ], 429);
+        }
+
         $id = DB::table('tnmtyeucaubaoduong')->insertGetId([
             'room_id' => $contract->room_id,
             'tenant_id' => $tenant->id,

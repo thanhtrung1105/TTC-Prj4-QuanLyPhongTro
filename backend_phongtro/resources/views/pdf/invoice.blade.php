@@ -8,6 +8,8 @@
         .header { text-align: center; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 20px; }
         .title { font-size: 20px; font-weight: bold; text-transform: uppercase; }
         .info { margin-bottom: 20px; }
+        .info-grid { display: flex; justify-content: space-between; margin-bottom: 20px; }
+        .info-col { width: 48%; }
         table { width: 100%; border-collapse: collapse; margin-top: 10px; }
         th, td { border: 1px solid #000; padding: 8px; text-align: left; }
         th { background-color: #f2f2f2; }
@@ -25,7 +27,15 @@
     <div class="info">
         <p><strong>Mã hóa đơn:</strong> HD-{{ str_pad($invoice->id, 5, '0', STR_PAD_LEFT) }}</p>
         <p><strong>Ngày lập:</strong> {{ \Carbon\Carbon::parse($invoice->created_at)->format('d/m/Y') }}</p>
-        <p><strong>Trạng thái:</strong> {{ $invoice->status == 'paid' ? 'Đã thanh toán' : 'Chưa thanh toán' }}</p>
+        <p><strong>Trạng thái:</strong> {{ $invoice->status == 'paid' ? 'Đã thanh toán' : ($invoice->status == 'overdue' ? 'Quá hạn' : 'Chưa thanh toán') }}</p>
+    </div>
+
+    <div class="info">
+        @if($invoice->contract)
+        <p><strong>Phòng:</strong> {{ $invoice->contract->room->room_number ?? 'N/A' }} — Tầng {{ $invoice->contract->room->floor ?? 'N/A' }}</p>
+        <p><strong>Khách thuê:</strong> {{ $invoice->contract->tenant->fullname ?? 'N/A' }}</p>
+        <p><strong>SĐT:</strong> {{ $invoice->contract->tenant->phone ?? 'N/A' }}</p>
+        @endif
     </div>
 
     <table>
